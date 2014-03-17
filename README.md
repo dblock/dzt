@@ -3,7 +3,9 @@ DZT
 
 [![Build Status](https://travis-ci.org/dblock/dzt.png)](https://travis-ci.org/dblock/dzt)
 
-Slice deep-zoom tiled images.
+Slice deep-zoom tiled images to be used with [OpenSeaDragon](http://openseadragon.github.io/) or [ARTiledImageView](https://github.com/dblock/ARTiledImageView).
+
+![](screenshots/goya.gif)
 
 ## Usage
 
@@ -24,6 +26,7 @@ dzt slice image.jpg --output tiles
 ```
 
 Creates a *tiles* folder with deep-zoom tiles.
+
 
 ## Contributing
 
