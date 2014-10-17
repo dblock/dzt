@@ -8,6 +8,7 @@ module DZT
     DEFAULT_TILE_OVERLAP = 0
     DEFAULT_QUALITY = 75
     DEFAULT_TILE_FORMAT = "jpg"
+    DEFAULT_OVERWRITE_FLAG = false
 
     # Generates the DZI-formatted tiles and sets necessary metadata on this object.
     #
@@ -32,7 +33,7 @@ module DZT
       @max_tiled_width = @tile_source.columns
 
       @tile_quality = options[:quality] || DEFAULT_QUALITY
-      @overwrite = options[:overwrite] || false
+      @overwrite = options[:overwrite] || DEFAULT_OVERWRITE_FLAG
       @storage = options[:storage]
     end
 
