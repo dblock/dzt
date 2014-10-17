@@ -1,4 +1,6 @@
 # Deep Zoom module for generating Deep Zoom (DZI) tiles from a source image
+require_relative 'file_storage'
+require_relative 's3_storage'
 module DZT
   class Tiler
     # Defaults
@@ -14,21 +16,24 @@ module DZT
     # @param format Format for output tiles (default: "jpg")
     # @param size Size, in pixels, for tile squares (default: 512)
     # @param overlap Size, in pixels, of the overlap between tiles (default: 2)
-    # @param overwrite If true, overwrites existing tiles (default: false)
-    # @param destination: Full directory in which to output tiles.
+    # @param overwrite Whether or not to overwrite if the destination exists (default: false)
+    # @param storage Either an instance of S3Storage or FileStorage
     #
     def initialize(options)
       @tile_source = options[:source]
       raise "Missing options[:source]." unless @tile_source
+
       @tile_source = Magick::Image.read(@tile_source)[0] if @tile_source.is_a?(String)
       @tile_size = options[:size] || DEFAULT_TILE_SIZE
       @tile_overlap = options[:overlap] || DEFAULT_TILE_OVERLAP
       @tile_format  = options[:format] || DEFAULT_TILE_FORMAT
+
       @max_tiled_height = @tile_source.rows
       @max_tiled_width = @tile_source.columns
+
       @tile_quality = options[:quality] || DEFAULT_QUALITY
       @overwrite = options[:overwrite] || false
-      @destination = options[:destination] || File.join(Dir.pwd, "tiles")
+      @storage = options[:storage]
     end
 
     ##
@@ -36,10 +41,7 @@ module DZT
     # Uses a default tile size of 512 pixels, with a default overlap of 2 pixel.
     ##
     def slice!(&block)
-      if ! @overwrite && File.directory?(@destination) && ! Dir["@{@destination}/*"].empty?
-        raise "Output directory #{@destination} already exists!"
-        @overwrite ? Rails.logger.warn(msg) : raise(msg)
-      end
+      raise "Output #{@destination} already exists!" if ! @overwrite && @storage.exists?
 
       image = @tile_source.dup
       orig_width, orig_height = image.columns, image.rows
@@ -48,11 +50,10 @@ module DZT
       max_level(orig_width, orig_height).downto(0) do |level|
         width, height = image.columns, image.rows
 
-        current_level_dir = File.join(@destination, level.to_s)
-        FileUtils.mkdir_p(current_level_dir)
-
+        current_level_storage_dir = @storage.storage_location(level)
+        @storage.mkdir(current_level_storage_dir)
         if block_given?
-          yield current_level_dir
+          yield current_level_storage_dir
         end
 
         # iterate over columns
@@ -61,7 +62,7 @@ module DZT
           # iterate over rows
           y, row_count = 0, 0
           while y < height
-            dest_path = File.join(current_level_dir, "#{col_count}_#{row_count}.#{@tile_format}")
+            dest_path = File.join(current_level_storage_dir, "#{col_count}_#{row_count}.#{@tile_format}")
             tile_width, tile_height = tile_dimensions(x, y, @tile_size, @tile_overlap)
 
             save_cropped_image(image, dest_path, x, y, tile_width, tile_height, @tile_quality)
@@ -120,7 +121,7 @@ module DZT
       # The crop method retains the offset information in the cropped image.
       # To reset the offset data, adding true as the last argument to crop.
       cropped = img.crop(x, y, width, height, true)
-      cropped.write(dest) { @quality = quality }
+      @storage.write(cropped, dest, quality: quality)
     end
   end
 end

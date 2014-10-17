@@ -15,9 +15,12 @@ command :slice do |c|
     if args.length < 1
       raise 'You must specify an image file to slice.'
     end
+    storage = DZT::FileStorage.new(
+      destination: options[:output]
+    )
     tiler = DZT::Tiler.new(
       source: args[0],
-      destination: options[:output]
+      storage: storage
     )
     tiler.slice! do |path|
       puts path
