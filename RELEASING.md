@@ -11,7 +11,7 @@ bundle install
 rake
 ```
 
-Check that the last build succeeded in [Travis CI](https://travis-ci.org/tim-vandecasteele/dzt) for all supported platforms.
+Check that the last build succeeded in [Travis CI](https://travis-ci.org/dblock/dzt) for all supported platforms.
 
 Increment the version, modify [lib/dzt/version.rb](lib/dzt/version.rb).
 
