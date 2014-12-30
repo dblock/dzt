@@ -1,7 +1,10 @@
 DZT
 ===
 
-[![Build Status](https://travis-ci.org/dblock/dzt.png)](https://travis-ci.org/dblock/dzt)
+[![Gem Version](http://img.shields.io/gem/v/dzt.svg)](http://badge.fury.io/rb/dzt)
+[![Build Status](http://img.shields.io/travis/dblock/dzt.svg)](https://travis-ci.org/dblock/dzt)
+[![Dependency Status](https://gemnasium.com/dblock/dzt.svg)](https://gemnasium.com/dblock/dzt)
+[![Code Climate](https://codeclimate.com/github/dblock/dzt.svg)](https://codeclimate.com/github/dblock/dzt)
 
 Slice deep-zoom tiled images to be used with [OpenSeaDragon](http://openseadragon.github.io/) or [ARTiledImageView](https://github.com/dblock/ARTiledImageView).
 
