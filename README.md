@@ -51,6 +51,6 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Copyright and License
 
-Copyright (c) 2014, Daniel Doubrovkine, [Artsy](http://artsy.github.io). Some tiling code inspired from [deep_zoom_slicer](https://github.com/meso-unimpressed/deep_zoom_slicer).
+Copyright (c) 2015, Daniel Doubrovkine, [Artsy](http://artsy.github.io). Some tiling code inspired from [deep_zoom_slicer](https://github.com/meso-unimpressed/deep_zoom_slicer).
 
 This project is licensed under the [MIT License](LICENSE.md).
