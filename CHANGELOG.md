@@ -1,3 +1,8 @@
+Next Release
+============
+
+* Your contribution here.
+
 ### 0.2.1 (1/2/2015)
 
 * [#8](https://github.com/dblock/dzt/pull/8): Fixes setting quality via command line - [@dzucconi](https://github.com/dzucconi).
