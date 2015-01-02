@@ -20,10 +20,12 @@ describe DZT::Tiler do
         image = Magick::Image::read("#{tmpdir}/11/1_1.jpg").first
         expect(image.columns).to eq(512)
         expect(image.rows).to eq(512)
+        expect(image.quality).to eq(75)
         # edge
         image = Magick::Image::read("#{tmpdir}/11/2_2.jpg").first
         expect(image.columns).to eq(168)
         expect(image.rows).to eq(443)
+        expect(image.quality).to eq(75)
       end
     end
   end
