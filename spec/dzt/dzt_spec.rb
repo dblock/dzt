@@ -26,6 +26,17 @@ describe DZT do
           expect(image.rows).to eq(512)
         end
       end
+
+      it "correctly parses numeric options" do
+        goya = File.join(@fixtures_dir, "francisco-jose-de-goya-y-lucientes-senora-sabasa-garcia.jpg")
+        Dir.mktmpdir do |tmpdir|
+          `"#{@binary}" slice "#{goya}" --output #{tmpdir} --quality=50`
+          expect(Dir["#{tmpdir}/*"].map { |dir| dir.split("/").last.to_i }.sort).to eq((0..12).to_a)
+          # center
+          image = Magick::Image::read("#{tmpdir}/11/1_1.jpg").first
+          expect(image.quality).to eq(50)
+        end
+      end
     end
     context 'uploading to S3' do
       before :each do

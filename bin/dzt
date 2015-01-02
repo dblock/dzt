@@ -12,9 +12,9 @@ default_command :slice
 desc "Slice an image"
 command :slice do |c|
   c.flag [:o, :output, 'output'], desc: 'Output folder'
-  c.flag [:ts, :tilesize, 'tile-size'], desc: 'Tile size', default_value: DZT::Tiler::DEFAULT_TILE_SIZE
-  c.flag [:to, :tileoverlap, 'tile-overlap'], desc: 'Tile overlap', default_value: DZT::Tiler::DEFAULT_TILE_OVERLAP
-  c.flag [:q, :quality], desc: 'Output quality', default_value: DZT::Tiler::DEFAULT_QUALITY
+  c.flag [:ts, :tilesize, 'tile-size'], desc: 'Tile size', default_value: DZT::Tiler::DEFAULT_TILE_SIZE, type: Integer
+  c.flag [:to, :tileoverlap, 'tile-overlap'], desc: 'Tile overlap', default_value: DZT::Tiler::DEFAULT_TILE_OVERLAP, type: Integer
+  c.flag [:q, :quality], desc: 'Output quality', default_value: DZT::Tiler::DEFAULT_QUALITY, type: Integer
   c.flag [:f, :format], desc: 'Tile format', default_value: DZT::Tiler::DEFAULT_TILE_FORMAT
   c.flag [:overwrite], desc: 'Overwrite output files', default_value: DZT::Tiler::DEFAULT_OVERWRITE_FLAG
   c.flag [:acl], desc: 'S3 Acl', default_value: DZT::S3Storage::DEFAULT_ACL
