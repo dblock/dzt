@@ -8,7 +8,7 @@ program_desc 'Tile images into deep-zoom tiles'
 
 default_command :slice
 
-desc "Slice an image"
+desc 'Slice an image'
 command :slice do |c|
   c.flag [:o, :output, 'output'], desc: 'Output folder'
   c.flag [:ts, :tilesize, 'tile-size'], desc: 'Tile size', default_value: DZT::Tiler::DEFAULT_TILE_SIZE, type: Integer
@@ -21,10 +21,8 @@ command :slice do |c|
   c.flag [:s3_key, 's3-key'], desc: 'S3 Key', default_value: DZT::S3Storage::DEFAULT_KEY
   c.flag [:aws_id, 'aws-id'], desc: 'AWS Id'
   c.flag [:aws_secret, 'aws-secret'], desc: 'AWS Secret'
-  c.action do |global_options, options, args|
-    if args.length < 1
-      raise 'You must specify an image file to slice.'
-    end
+  c.action do |_global_options, options, args|
+    fail 'You must specify an image file to slice.' if args.length < 1
     if options[:output]
       storage = DZT::FileStorage.new(
         destination: options[:output]
@@ -38,7 +36,7 @@ command :slice do |c|
         aws_secret: options[:aws_secret]
       )
     else
-      raise 'You must specify either --output or --aws_id, --aws_secret and --bucket.'
+      fail 'You must specify either --output or --aws_id, --aws_secret and --bucket.'
     end
     tiler = DZT::Tiler.new(
       source: args[0],

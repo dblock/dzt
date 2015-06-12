@@ -7,7 +7,7 @@ module DZT
     DEFAULT_TILE_SIZE = 512
     DEFAULT_TILE_OVERLAP = 0
     DEFAULT_QUALITY = 75
-    DEFAULT_TILE_FORMAT = "jpg"
+    DEFAULT_TILE_FORMAT = 'jpg'
     DEFAULT_OVERWRITE_FLAG = false
 
     # Generates the DZI-formatted tiles and sets necessary metadata on this object.
@@ -22,7 +22,7 @@ module DZT
     #
     def initialize(options)
       @tile_source = options[:source]
-      raise "Missing options[:source]." unless @tile_source
+      fail 'Missing options[:source].' unless @tile_source
 
       @tile_source = Magick::Image.read(@tile_source)[0] if @tile_source.is_a?(String)
       @tile_size = options[:size] || DEFAULT_TILE_SIZE
@@ -41,27 +41,29 @@ module DZT
     # Generates the DZI-formatted tiles and sets necessary metadata on this object.
     # Uses a default tile size of 512 pixels, with a default overlap of 2 pixel.
     ##
-    def slice!(&block)
-      raise "Output #{@destination} already exists!" if ! @overwrite && @storage.exists?
+    def slice!(&_block)
+      fail "Output #{@destination} already exists!" if ! @overwrite && @storage.exists?
 
       image = @tile_source.dup
-      orig_width, orig_height = image.columns, image.rows
+      orig_width = image.columns
+      orig_height = image.rows
 
       # iterate over all levels (= zoom stages)
       max_level(orig_width, orig_height).downto(0) do |level|
-        width, height = image.columns, image.rows
+        width = image.columns
+        height = image.rows
 
         current_level_storage_dir = @storage.storage_location(level)
         @storage.mkdir(current_level_storage_dir)
-        if block_given?
-          yield current_level_storage_dir
-        end
+        yield current_level_storage_dir if block_given?
 
         # iterate over columns
-        x, col_count = 0, 0
+        x = 0
+        col_count = 0
         while x < width
           # iterate over rows
-          y, row_count = 0, 0
+          y = 0
+          row_count = 0
           while y < height
             dest_path = File.join(current_level_storage_dir, "#{col_count}_#{row_count}.#{@tile_format}")
             tile_width, tile_height = tile_dimensions(x, y, @tile_size, @tile_overlap)
@@ -94,13 +96,13 @@ module DZT
       tile_width  = (x > 0) ? overlapping_tile_size : border_tile_size
       tile_height = (y > 0) ? overlapping_tile_size : border_tile_size
 
-      return tile_width, tile_height
+      [tile_width, tile_height]
     end
 
     # Calculates how often an image with given dimension can
     # be divided by two until 1x1 px are reached.
     def max_level(width, height)
-      return (Math.log([width, height].max) / Math.log(2)).ceil
+      (Math.log([width, height].max) / Math.log(2)).ceil
     end
 
     # Crops part of src image and writes it to dest path.
@@ -114,10 +116,10 @@ module DZT
       if src.is_a? Magick::Image
         img = src
       else
-        img = Magick::Image::read(src).first
+        img = Magick::Image.read(src).first
       end
 
-      quality = quality * 100 if quality < 1
+      quality *= 100 if quality < 1
 
       # The crop method retains the offset information in the cropped image.
       # To reset the offset data, adding true as the last argument to crop.

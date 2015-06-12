@@ -34,30 +34,28 @@ module DZT
     end
 
     def storage_location(level)
-      "#{@s3_key}/#{level.to_s}"
+      "#{@s3_key}/#{level}"
     end
 
     # no-op
-    def mkdir(path)
+    def mkdir(_path)
     end
 
     def write(file, dest, options = {})
       quality = options[:quality]
       s3.put_object(@s3_bucket, dest, file.to_blob { @quality = quality if quality },
-        'Content-Type' => file.mime_type,
-        'x-amz-acl' => @s3_acl
-      )
+                    'Content-Type' => file.mime_type,
+                    'x-amz-acl' => @s3_acl
+                   )
     end
 
     private
 
     def require_fog!
-      begin
-        require 'fog'
-      rescue LoadError => e
-        STDERR.puts "Fog is required for storing data in S3, run `gem install fog`."
-        raise e
-      end
+      require 'fog'
+    rescue LoadError => e
+      STDERR.puts 'Fog is required for storing data in S3, run `gem install fog`.'
+      raise e
     end
   end
 end

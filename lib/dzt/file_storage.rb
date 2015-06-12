@@ -8,7 +8,7 @@ module DZT
     end
 
     def exists?
-      File.directory?(@store_path) && ! Dir["@{@store_path}/*"].empty?
+      File.directory?(@store_path) && !Dir['@{@store_path}/*'].empty?
     end
 
     def storage_location(level)
