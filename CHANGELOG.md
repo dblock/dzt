@@ -1,6 +1,7 @@
 Next Release
 ============
 
+* [#9](https://github.com/dblock/dzt/issues/9): Do not require fog unless producing output to S3, clarify require fog - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 ### 0.2.1 (1/2/2015)

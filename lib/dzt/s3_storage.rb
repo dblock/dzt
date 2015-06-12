@@ -18,11 +18,14 @@ module DZT
     end
 
     def s3
-      @s3 ||= Fog::Storage.new(
-        provider: 'AWS',
-        aws_access_key_id: @s3_id,
-        aws_secret_access_key: @s3_secret
-      )
+      @s3 ||= begin
+        require_fog!
+        Fog::Storage.new(
+          provider: 'AWS',
+          aws_access_key_id: @s3_id,
+          aws_secret_access_key: @s3_secret
+        )
+      end
     end
 
     # Currently does not supporting checking S3 fo overwritten files
@@ -45,5 +48,16 @@ module DZT
         'x-amz-acl' => @s3_acl
       )
     end
-  end 
+
+    private
+
+    def require_fog!
+      begin
+        require 'fog'
+      rescue LoadError => e
+        STDERR.puts "Fog is required for storing data in S3, run `gem install fog`."
+        raise e
+      end
+    end
+  end
 end

@@ -14,6 +14,11 @@ describe DZT do
     end
   end
   describe "#slice" do
+    it "requires storage" do
+      goya = File.join(@fixtures_dir, "francisco-jose-de-goya-y-lucientes-senora-sabasa-garcia.jpg")
+      err = `"#{@binary}" slice #{goya} 2>&1`
+      expect(err).to include "error: You must specify either --output or --aws_id, --aws_secret and --bucket."
+    end
     context 'storing files locally' do
       it "slices an image" do
         goya = File.join(@fixtures_dir, "francisco-jose-de-goya-y-lucientes-senora-sabasa-garcia.jpg")

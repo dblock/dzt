@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'gli'
 require 'dzt'
-require 'fog'
 
 include GLI::App
 
@@ -30,7 +29,7 @@ command :slice do |c|
       storage = DZT::FileStorage.new(
         destination: options[:output]
       )
-    else
+    elsif options[:aws_id] && options[:aws_secret] && options[:bucket]
       storage = DZT::S3Storage.new(
         s3_acl: options[:acl],
         s3_bucket: options[:bucket],
@@ -38,6 +37,8 @@ command :slice do |c|
         aws_id: options[:aws_id],
         aws_secret: options[:aws_secret]
       )
+    else
+      raise 'You must specify either --output or --aws_id, --aws_secret and --bucket.'
     end
     tiler = DZT::Tiler.new(
       source: args[0],
