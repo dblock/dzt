@@ -52,9 +52,9 @@ module DZT
     private
 
     def require_fog!
-      require 'fog'
+      require 'fog/aws'
     rescue LoadError => e
-      STDERR.puts 'Fog is required for storing data in S3, run `gem install fog`.'
+      STDERR.puts 'Fog is required for storing data in S3, run `gem install fog-aws`.'
       raise e
     end
   end
