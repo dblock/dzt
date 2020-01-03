@@ -1,5 +1,6 @@
 ### Next Release (TBD)
 
+* [#11](https://github.com/dblock/dzt/pull/11): Constrain rake and require only fog/aws, not all of fog - [@joeyAghion](https://github.com/joeyAghion).
 * Your contribution here.
 
 ### 0.2.2 (6/12/2015)
